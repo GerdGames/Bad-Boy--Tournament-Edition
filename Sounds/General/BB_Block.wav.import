@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/BB_Block.wav-10630a02e1d8ca8e0cd3e442176e5fce.sample"
+
+[deps]
+
+source_file="res://Sounds/General/BB_Block.wav"
+dest_files=[ "res://.import/BB_Block.wav-10630a02e1d8ca8e0cd3e442176e5fce.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0
