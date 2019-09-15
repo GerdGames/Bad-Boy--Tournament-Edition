@@ -70,14 +70,16 @@ func _process(delta):
 					busy = false
 				# Jumping
 				elif dir.y > 0:
-#					busy = true
-#					$AnimatedSprite.play("Jump Squat")
-#					yield(get_node("AnimatedSprite"), "animation_finished")
-#					busy = false
+					busy = true
+					$AnimatedSprite.play("Jump Squat")
+					yield(get_node("AnimatedSprite"), "animation_finished")
+					busy = false
+					# add jump impulse
+					vel.x = groundSpeed * dir.x
+					vel.y = jumpVel
 					#set airborne
 					airborne = true
-					# add jump impulse
-					vel.y = jumpVel
+					
 				# if crouching
 				elif dir.y < 0:
 					busy = true
@@ -101,7 +103,14 @@ func _process(delta):
 					$AnimatedSprite.play("Idle")
 			# if crouching
 			else:
-				if dir.y < 0:
+				# Light
+				if Input.is_action_just_pressed("Light"):
+					busy = true
+					$AnimatedSprite.play("Crouch Kick")
+					yield(get_node("AnimatedSprite"), "animation_finished")
+					busy = false
+				# stay crouched
+				elif dir.y < 0:
 					$AnimatedSprite.play("Crouched")
 				else:
 					busy = true
@@ -115,7 +124,8 @@ func _process(delta):
 func _physics_process(delta):
 	# add gravity
 	vel.y += grav * delta
+	
+	vel = move_and_slide(vel, Vector2(0, -1))
 	#check if landing
 	if airborne && is_on_floor():
 		airborne = false
-	move_and_slide(vel, Vector2(0, -1))

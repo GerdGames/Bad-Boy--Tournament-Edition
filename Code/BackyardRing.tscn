@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://Stage Sprites/Stage_WIP_Pixel.png" type="Texture" id=1]
-[ext_resource path="res://BadBoy.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Stage Sprites/Stage_WIP_Pixel2.png" type="Texture" id=1]
+[ext_resource path="res://Code/BadBoy.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Code/HUD.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 165.002, 10.912 )
@@ -32,3 +33,5 @@ shape = SubResource( 2 )
 
 [node name="BadBoy" parent="." instance=ExtResource( 2 )]
 position = Vector2( 115.859, 86.652 )
+
+[node name="HUD" parent="." instance=ExtResource( 3 )]
