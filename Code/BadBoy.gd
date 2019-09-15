@@ -119,8 +119,15 @@ func _process(delta):
 					crouched = false
 					busy = false
 		else:
+			# Light
+			if Input.is_action_just_pressed("Light"):
+				busy = true
+				$AnimatedSprite.play("Air Kick")
+				yield(get_node("AnimatedSprite"), "animation_finished")
+				busy = false
 			#airborne
-			$AnimatedSprite.play("Airborne")
+			else:
+				$AnimatedSprite.play("Airborne")
 func _physics_process(delta):
 	# add gravity
 	vel.y += grav * delta
