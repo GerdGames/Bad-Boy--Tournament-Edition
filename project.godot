@@ -19,11 +19,15 @@ config/name="Bad Boy: Tournament Edition"
 run/main_scene="res://Code/BackyardRing.tscn"
 config/icon="res://icon.png"
 
+[debug]
+
+settings/fps/force_fps=60
+settings/stdout/print_fps=true
+
 [display]
 
 window/size/width=320
 window/size/height=180
-window/size/fullscreen=true
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 
