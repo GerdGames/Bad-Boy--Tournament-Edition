@@ -5,10 +5,10 @@
 [ext_resource path="res://Code/HUD.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 165.002, 9.7773 )
+extents = Vector2( 163, 10 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 8.83242, 86.7773 )
+extents = Vector2( 8.83242, 85 )
 
 [node name="BackyardRing" type="Node2D"]
 
@@ -20,18 +20,18 @@ texture = ExtResource( 1 )
 position = Vector2( -163.141, -83.2227 )
 
 [node name="Floor" type="CollisionShape2D" parent="Stage_WIP_Pixel/StaticBody2D"]
-position = Vector2( 160, 175 )
+position = Vector2( 162.141, 172.223 )
 shape = SubResource( 1 )
 
 [node name="Left Wall" type="CollisionShape2D" parent="Stage_WIP_Pixel/StaticBody2D"]
-position = Vector2( 50, 80 )
+position = Vector2( 54.141, 78.2227 )
 shape = SubResource( 2 )
 
 [node name="Right Wall" type="CollisionShape2D" parent="Stage_WIP_Pixel/StaticBody2D"]
-position = Vector2( 275, 80 )
+position = Vector2( 273.141, 78.2227 )
 shape = SubResource( 2 )
 
 [node name="BadBoy" parent="." instance=ExtResource( 2 )]
-position = Vector2( 114, 150 )
+position = Vector2( 114, 147 )
 
 [node name="HUD" parent="." instance=ExtResource( 3 )]

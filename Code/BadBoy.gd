@@ -19,9 +19,19 @@ var rightFacing = true
 var vel = Vector2()
 # load in the hitbox object
 var hitBox = preload("res://Code/Hitbox.tscn")
+# index of the palette to use
+export (int) var palette = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	# Set the palette
+	# check if palette 1
+	if palette == 1:
+		var pal = load("res://Bad Boy Sprites/Rusty/BadBoyRustySprites.tres")
+		$AnimatedSprite.set_sprite_frames(pal)
+	# otherwise set to the default palette
+	else:
+		var pal = load("res://Bad Boy Sprites/Originals/BadBoyOriginalSprites.tres")
+		$AnimatedSprite.set_sprite_frames(pal)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 # warning-ignore:unused_argument
