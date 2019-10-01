@@ -8,11 +8,11 @@ extents = Vector2( 9, 15 )
 
 [node name="BadBoy" type="KinematicBody2D"]
 script = ExtResource( 1 )
-palette = 1
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = ExtResource( 2 )
 animation = "Idle"
+frame = 1
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

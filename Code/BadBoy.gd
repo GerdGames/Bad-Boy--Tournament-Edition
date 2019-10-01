@@ -14,7 +14,9 @@ var crouched = false
 # whether badboy is airborne or not
 var airborne = true
 # whether badboy is facing right or not
-var rightFacing = true
+export (bool) var rightFacing = true
+# a negative or positive value based on badboy's facing (-1 for left, 1 for right)
+var facingValue = 1
 # how fast badboy is moving
 var vel = Vector2()
 # load in the hitbox object
@@ -40,9 +42,9 @@ func _process(delta):
 	var dir = Vector2()
 	# Get current stick direction
 	if Input.is_action_pressed("ui_right"):
-		dir.x += 1
+		dir.x += facingValue
 	if Input.is_action_pressed("ui_left"):
-		dir.x -= 1
+		dir.x -= facingValue
 	if Input.is_action_pressed("ui_down"):
 		dir.y -= 1
 	if Input.is_action_pressed("ui_up"):
@@ -54,7 +56,7 @@ func _process(delta):
 		vel.x = vel.x
 	# if standing and not busy or airborne add ground velocity
 	elif !crouched && !busy:
-		vel.x = groundSpeed * dir.x
+		vel.x = groundSpeed * dir.x * facingValue
 	# if crouched or busy zero out ground velocity
 	else:
 		vel.x = 0
@@ -65,6 +67,15 @@ func _process(delta):
 		# if not busy, check to switch sides
 		#if grounded
 		if !airborne:
+			#check facing
+			if rightFacing:
+				$AnimatedSprite.set_flip_h(false)
+				facingValue = 1
+				$CollisionShape2D.position = Vector2(-10, 7)
+			else:
+				$AnimatedSprite.set_flip_h(true)
+				facingValue = -1
+				$CollisionShape2D.position = Vector2(10, 7)
 			# if standing
 			if !crouched:
 				# Light
@@ -74,7 +85,7 @@ func _process(delta):
 					yield(get_node("AnimatedSprite"), "frame_changed")
 					if $AnimatedSprite.get_frame() == 1:
 						var lphb = hitBox.instance()
-						lphb.initialize(1, 10, 1, 1, Vector2(7, 3), Vector2(8, 4), .2)
+						lphb.initialize(1, 10, 1, 1, Vector2(7 * facingValue, 3), Vector2(8 * facingValue, 4), .2)
 						add_child(lphb)
 					yield(get_node("AnimatedSprite"), "animation_finished")
 					busy = false
@@ -91,7 +102,7 @@ func _process(delta):
 					yield(get_node("AnimatedSprite"), "animation_finished")
 					busy = false
 					# add jump impulse
-					vel.x = groundSpeed * dir.x
+					vel.x = groundSpeed * dir.x * facingValue
 					vel.y = jumpVel
 					#set airborne
 					airborne = true

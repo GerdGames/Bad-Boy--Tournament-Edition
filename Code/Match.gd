@@ -12,13 +12,13 @@ var p1Rounds
 # player 2 rounds won
 var p2Rounds
 # player 1 character
-var p1Char
+var p1Char = preload("res://Code/BadBoy.tscn")
 # player 2 character
-var p2Char
+var p2Char = preload("res://Code/BadBoy.tscn")
 # player 1 palette
-var p1Pal
+var p1Pal = 0
 # player 2 palette
-var p2Pal
+var p2Pal = 1
 # player 1 health
 var p1HP
 # player 2 health
@@ -27,8 +27,20 @@ var p2HP
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	#initialize game variables 0 wins, 99 time, 100 health etc.
-	pass # Replace with function body.
+	# initialize game variables 0 wins, 99 time, 100 health etc.
+	# spawn characters
+	# spawn player 1
+	var p1 = p1Char.instance()
+	p1.position = Vector2(120, 140)
+	p1.palette = p1Pal
+	p1.rightFacing = true
+	add_child(p1)
+	# spawn player 2
+	var p2 = p2Char.instance()
+	p2.position = Vector2(200, 140)
+	p2.palette = p2Pal
+	p2.rightFacing = false
+	add_child(p2)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
