@@ -79,14 +79,22 @@ func _process(delta):
 			#check facing
 			if rightFacing:
 				$AnimatedSprite.set_flip_h(false)
+				$AnimatedSprite.offset.x = 10
+				#check if just switching
+				if facingValue == -1:
+					vel.x == 100
 				facingValue = 1
-				$CollisionShape2D.position = Vector2(-10, 7)
 			else:
 				$AnimatedSprite.set_flip_h(true)
+				$AnimatedSprite.offset.x = -10
+				#check if just switching
+				if facingValue == 1:
+					vel.x == -100
 				facingValue = -1
-				$CollisionShape2D.position = Vector2(10, 7)
 			# if standing
 			if !crouched:
+				$CollisionShape2D.scale = Vector2(1, 1)
+				$CollisionShape2D.position.y = 7
 				# Light
 				if Input.is_action_just_pressed(light):
 					busy = true
@@ -94,7 +102,7 @@ func _process(delta):
 					yield(get_node("AnimatedSprite"), "frame_changed")
 					if $AnimatedSprite.get_frame() == 1:
 						var lphb = hitBox.instance()
-						lphb.initialize(1, 10, 1, 1, Vector2(7 * facingValue, 3), Vector2(8 * facingValue, 4), .2)
+						lphb.initialize(player, 10, 1, 1, Vector2(17 * facingValue, 3), Vector2(8 * facingValue, 4), .2)
 						add_child(lphb)
 					yield(get_node("AnimatedSprite"), "animation_finished")
 					busy = false
@@ -136,9 +144,12 @@ func _process(delta):
 				
 				# if neither
 				else:
+					busy = false
 					$AnimatedSprite.play("Idle")
 			# if crouching
 			else:
+				$CollisionShape2D.scale = Vector2(1.1, .7)
+				$CollisionShape2D.position.y = 11
 				# Light
 				if Input.is_action_just_pressed(light):
 					busy = true

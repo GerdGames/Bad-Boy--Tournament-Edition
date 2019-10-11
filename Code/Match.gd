@@ -23,21 +23,24 @@ var p2Pal = 1
 var p1HP
 # player 2 health
 var p2HP
-
+#player 1 object
+var p1
+#player 2 object
+var p2 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# initialize game variables 0 wins, 99 time, 100 health etc.
 	# spawn characters
 	# spawn player 1
-	var p1 = p1Char.instance()
+	p1 = p1Char.instance()
 	p1.player = 1;
 	p1.position = Vector2(120, 140)
 	p1.palette = p1Pal
 	p1.rightFacing = true
 	add_child(p1)
 	# spawn player 2
-	var p2 = p2Char.instance()
+	p2 = p2Char.instance()
 	p2.player = 2;
 	p2.position = Vector2(200, 140)
 	p2.palette = p2Pal
@@ -45,7 +48,7 @@ func _ready():
 	add_child(p2)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
+func _process(delta):
 	#decrement timer
 		#if timer 0 player with more health wins
 			#if players have equal health tie and no one wins
@@ -53,4 +56,10 @@ func _ready():
 		# if both players have 0 health tie and no one wins
 		# otherwise if p2 has 0 health p1 wins and vice versa
 	#check facing if p1 is left of p2 set p1 to face right and p2 to face left
+	if p1.position.x < p2.position.x:
+		p1.rightFacing = true
+		p2.rightFacing = false
+	elif p1.position.x > p2.position.x:
+		p1.rightFacing = false
+		p2.rightFacing = true
 #	pass
