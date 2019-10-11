@@ -24,6 +24,7 @@ var hitBox = preload("res://Code/Hitbox.tscn")
 # index of the palette to use
 export (int) var palette = 0
 # Called when the node enters the scene tree for the first time.
+export (int) var player = 0;
 func _ready():
 	# Set the palette
 	# check if palette 1
@@ -38,16 +39,24 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 # warning-ignore:unused_argument
 func _process(delta):
+	var prefix = str("p" , (player) );
+	var light = str(prefix , "_light");
+	var heavy = str(prefix , "_heavy");
+	var left = str(prefix , "_left");
+	var right = str(prefix , "_right");
+	var up = str(prefix , "_up");
+	var down = str(prefix , "_down");
+	
 	#what direction the stick is in
 	var dir = Vector2()
 	# Get current stick direction
-	if Input.is_action_pressed("ui_right"):
+	if Input.is_action_pressed(right):
 		dir.x += facingValue
-	if Input.is_action_pressed("ui_left"):
+	if Input.is_action_pressed(left):
 		dir.x -= facingValue
-	if Input.is_action_pressed("ui_down"):
+	if Input.is_action_pressed(down):
 		dir.y -= 1
-	if Input.is_action_pressed("ui_up"):
+	if Input.is_action_pressed(up):
 		dir.y += 1
 	
 	# add horizontal movement
@@ -79,7 +88,7 @@ func _process(delta):
 			# if standing
 			if !crouched:
 				# Light
-				if Input.is_action_just_pressed("Light"):
+				if Input.is_action_just_pressed(light):
 					busy = true
 					$AnimatedSprite.play("Light Punch")
 					yield(get_node("AnimatedSprite"), "frame_changed")
@@ -90,7 +99,7 @@ func _process(delta):
 					yield(get_node("AnimatedSprite"), "animation_finished")
 					busy = false
 				# Heavy
-				elif Input.is_action_just_pressed("Heavy"):
+				elif Input.is_action_just_pressed(heavy):
 					busy = true
 					$AnimatedSprite.play("Medium Punch")
 					yield(get_node("AnimatedSprite"), "animation_finished")
@@ -131,7 +140,7 @@ func _process(delta):
 			# if crouching
 			else:
 				# Light
-				if Input.is_action_just_pressed("Light"):
+				if Input.is_action_just_pressed(light):
 					busy = true
 					$AnimatedSprite.play("Crouch Kick")
 					yield(get_node("AnimatedSprite"), "animation_finished")
@@ -147,7 +156,7 @@ func _process(delta):
 					busy = false
 		else:
 			# Light
-			if Input.is_action_just_pressed("Light"):
+			if Input.is_action_just_pressed(light):
 				busy = true
 				$AnimatedSprite.play("Air Kick")
 				yield(get_node("AnimatedSprite"), "animation_finished")

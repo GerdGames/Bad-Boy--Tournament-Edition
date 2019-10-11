@@ -31,12 +31,14 @@ func _ready():
 	# spawn characters
 	# spawn player 1
 	var p1 = p1Char.instance()
+	p1.player = 1;
 	p1.position = Vector2(120, 140)
 	p1.palette = p1Pal
 	p1.rightFacing = true
 	add_child(p1)
 	# spawn player 2
 	var p2 = p2Char.instance()
+	p2.player = 2;
 	p2.position = Vector2(200, 140)
 	p2.palette = p2Pal
 	p2.rightFacing = false
