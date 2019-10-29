@@ -7,6 +7,9 @@ var groundSpeed = 75
 var jumpVel = -250
 #gravity
 var grav = 600
+#health
+var health = 100
+var maxHealth = 100
 # whether badboy can make other actions
 var busy = false
 # whether badboy is crouched or standing
@@ -35,7 +38,6 @@ func _ready():
 	else:
 		var pal = load("res://Bad Boy Sprites/Originals/BadBoyOriginalSprites.tres")
 		$AnimatedSprite.set_sprite_frames(pal)
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 # warning-ignore:unused_argument
 func _process(delta):
@@ -80,16 +82,10 @@ func _process(delta):
 			if rightFacing:
 				$AnimatedSprite.set_flip_h(false)
 				$AnimatedSprite.offset.x = 10
-				#check if just switching
-				if facingValue == -1:
-					vel.x == 100
 				facingValue = 1
 			else:
 				$AnimatedSprite.set_flip_h(true)
 				$AnimatedSprite.offset.x = -10
-				#check if just switching
-				if facingValue == 1:
-					vel.x == -100
 				facingValue = -1
 			# if standing
 			if !crouched:

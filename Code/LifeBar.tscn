@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Code/LifeBar.gd" type="Script" id=1]
+[ext_resource path="res://UI/Healthbar.png" type="Texture" id=2]
+[ext_resource path="res://UI/BadBoyPortrait.png" type="Texture" id=3]
+[ext_resource path="res://UI/Life_Bar_Full.tres" type="StyleBox" id=4]
+[ext_resource path="res://UI/Life_Bar_Empty.tres" type="StyleBox" id=5]
+
+[node name="LifeBar" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -0.583984
+margin_right = -0.583984
+script = ExtResource( 1 )
+player = 2
+
+[node name="HealthBarBorder" type="Sprite" parent="."]
+position = Vector2( 69.584, 25 )
+texture = ExtResource( 2 )
+
+[node name="Portrait" type="Sprite" parent="HealthBarBorder"]
+show_behind_parent = true
+position = Vector2( -45, 0 )
+texture = ExtResource( 3 )
+
+[node name="ProgressBar" type="ProgressBar" parent="HealthBarBorder"]
+show_behind_parent = true
+margin_left = 53.0
+margin_top = 2.0
+margin_right = 138.0
+margin_bottom = 10.0
+rect_rotation = 180.0
+custom_styles/fg = ExtResource( 4 )
+custom_styles/bg = ExtResource( 5 )
+value = 50.0
+percent_visible = false
