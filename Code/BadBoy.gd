@@ -187,6 +187,7 @@ func _physics_process(delta):
 		yield(get_node("AnimatedSprite"), "animation_finished")
 		busy = false
 func _take_hit(damage, hitStun, blockStun):
-	get_parent()._player_hit(player, damage);
+	#get_parent()._player_hit(player, damage);
+	health -= damage;
 	# TODO: do something with hitstun and blockstun
 	print("taking hit, ouch");
