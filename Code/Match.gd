@@ -28,6 +28,18 @@ var p1
 #player 2 object
 var p2 
 
+func _player_hit(player, dmg):
+	if (player != 1 && player != 2):
+		print("not a valid player");
+		return;
+	else:
+		print("player taking hit");
+		if (player == 1):
+			p1HP -= dmg;
+		else:
+			p2HP -= dmg;
+	return;
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# initialize game variables 0 wins, 99 time, 100 health etc.

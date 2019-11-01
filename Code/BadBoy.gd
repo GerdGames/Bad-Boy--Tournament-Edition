@@ -28,6 +28,9 @@ var hitBox = preload("res://Code/Hitbox.tscn")
 export (int) var palette = 0
 # Called when the node enters the scene tree for the first time.
 export (int) var player = 0;
+func _hit() :
+	pass
+	
 func _ready():
 	# Set the palette
 	# check if palette 1
@@ -98,7 +101,7 @@ func _process(delta):
 					yield(get_node("AnimatedSprite"), "frame_changed")
 					if $AnimatedSprite.get_frame() == 1:
 						var lphb = hitBox.instance()
-						lphb.initialize(player, 10, 1, 1, Vector2(17 * facingValue, 3), Vector2(8 * facingValue, 4), .2)
+						lphb.initialize(player, 10, 1, 1, Vector2(17 * facingValue, 3), Vector2(8 * facingValue, 4), .2, self)
 						add_child(lphb)
 					yield(get_node("AnimatedSprite"), "animation_finished")
 					busy = false
@@ -183,3 +186,6 @@ func _physics_process(delta):
 		$AnimatedSprite.play("Landing")
 		yield(get_node("AnimatedSprite"), "animation_finished")
 		busy = false
+func _take_hit():
+	get_parent()._player_hit(player, 5);
+	print("taking hit, ouch");

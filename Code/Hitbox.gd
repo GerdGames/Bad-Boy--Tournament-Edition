@@ -18,6 +18,8 @@ var lifetime = 1
 # how old the hitbox is
 var age = 0
 
+var playerOwned;
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	age = 0
@@ -33,8 +35,20 @@ func _process(delta):
 		#increment age
 		age += delta
 		
+func _initParent():
+	connect("body_entered", self, "handle_area")
+	
+func handle_area(body):
+	print("Handle Area");
+	if (body != playerOwned):
+		print(body);
+		if(body.has_method("_take_hit")):
+			body._take_hit();
+		print(playerOwned);
+	return;
+
 # Initialize variables
-func initialize(p, d, h, b, ps, s, l):
+func initialize(p, d, h, b, ps, s, l, po):
 	player = p
 	dmg = d
 	htStn = h
@@ -42,3 +56,5 @@ func initialize(p, d, h, b, ps, s, l):
 	pos = ps
 	size = s
 	lifetime = l
+	playerOwned = po;
+	_initParent();
