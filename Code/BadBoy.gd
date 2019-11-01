@@ -186,6 +186,7 @@ func _physics_process(delta):
 		$AnimatedSprite.play("Landing")
 		yield(get_node("AnimatedSprite"), "animation_finished")
 		busy = false
-func _take_hit():
-	get_parent()._player_hit(player, 5);
+func _take_hit(damage, hitStun, blockStun):
+	get_parent()._player_hit(player, damage);
+	# TODO: do something with hitstun and blockstun
 	print("taking hit, ouch");

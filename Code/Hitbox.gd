@@ -43,7 +43,7 @@ func handle_area(body):
 	if (body != playerOwned):
 		print(body);
 		if(body.has_method("_take_hit")):
-			body._take_hit();
+			body._take_hit(dmg, htStn, blkStn);
 		print(playerOwned);
 	return;
 
