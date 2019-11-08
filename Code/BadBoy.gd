@@ -107,7 +107,7 @@ func _process(delta):
 					yield(get_node("AnimatedSprite"), "frame_changed")
 					if $AnimatedSprite.get_frame() == 1:
 						var lphb = hitBox.instance()
-						lphb.initialize(player, 10, 1, 1, Vector2(17 * facingValue, -3), Vector2(8 * facingValue, 4), .2, self, false, false)
+						lphb.initialize(player, 10, 1, 1, Vector2(17 * facingValue, 3), Vector2(8 * facingValue, 4), .2, self, false, false)
 						add_child(lphb)
 					yield(get_node("AnimatedSprite"), "animation_finished")
 					busy = false
