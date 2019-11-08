@@ -17,6 +17,10 @@ var size = Vector2(0,0)
 var lifetime = 1
 # how old the hitbox is
 var age = 0
+# is attack overhead?
+var overhead = false;
+# is attack low?
+var low = false;
 
 var playerOwned;
 
@@ -43,12 +47,12 @@ func handle_area(body):
 	if (body != playerOwned):
 		print(body);
 		if(body.has_method("_take_hit")):
-			body._take_hit(dmg, htStn, blkStn);
+			body._take_hit(dmg, htStn, blkStn, overhead, low);
 		print(playerOwned);
 	return;
 
 # Initialize variables
-func initialize(p, d, h, b, ps, s, l, po):
+func initialize(p, d, h, b, ps, s, l, po, oh, lw):
 	player = p
 	dmg = d
 	htStn = h
@@ -57,4 +61,6 @@ func initialize(p, d, h, b, ps, s, l, po):
 	size = s
 	lifetime = l
 	playerOwned = po;
+	overhead = oh;
+	low = lw;
 	_initParent();
