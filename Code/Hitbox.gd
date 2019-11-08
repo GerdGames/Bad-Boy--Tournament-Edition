@@ -9,6 +9,8 @@ var dmg = 0
 var htStn = 0
 # how much block stun it does
 var blkStn = 0
+# how far the player will get knocked back
+var knockBack = 0
 # positon
 var pos = Vector2(0,0)
 # size
@@ -39,20 +41,21 @@ func _initParent():
 	connect("body_entered", self, "handle_area")
 	
 func handle_area(body):
-	print("Handle Area");
+	# print("Handle Area");
 	if (body != playerOwned):
-		print(body);
+		# print(body);
 		if(body.has_method("_take_hit")):
-			body._take_hit(dmg, htStn, blkStn);
+			body._take_hit(dmg, htStn, blkStn, knockBack);
 		print(playerOwned);
 	return;
 
 # Initialize variables
-func initialize(p, d, h, b, ps, s, l, po):
+func initialize(p, d, h, b, kb, ps, s, l, po):
 	player = p
 	dmg = d
 	htStn = h
 	blkStn = b
+	knockBack = kb
 	pos = ps
 	size = s
 	lifetime = l

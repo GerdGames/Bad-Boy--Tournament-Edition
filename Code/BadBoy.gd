@@ -70,13 +70,21 @@ func _process(delta):
 		vel.x = vel.x
 	# if standing and not busy or airborne add ground velocity
 	elif !crouched && !busy:
-		vel.x = groundSpeed * dir.x * facingValue
+		if dir.x != 0:
+			vel.x = groundSpeed * dir.x * facingValue
+		else:
+			if vel.x >= 10:
+				vel.x = vel.x * 0.2
+			else:
+				vel.x = 0
 	# if crouched or busy zero out ground velocity
 	else:
-		vel.x = 0
-	
+		if vel.x >= 10:
+			vel.x = vel.x * 0.2
+		else:
+			vel.x = 0
 	# Play appropriate animation
-	# if not busy
+	# if not busy or hurt
 	if !busy:
 		# if not busy, check to switch sides
 		#if grounded
@@ -96,25 +104,30 @@ func _process(delta):
 				$CollisionShape2D.position.y = 7
 				# Light
 				if Input.is_action_just_pressed(light):
-					busy = true
-					$AnimatedSprite.play("Light Punch")
-					yield(get_node("AnimatedSprite"), "frame_changed")
-					if $AnimatedSprite.get_frame() == 1:
-						var lphb = hitBox.instance()
-						lphb.initialize(player, 10, 1, 1, Vector2(17 * facingValue, 3), Vector2(8 * facingValue, 4), .2, self)
-						add_child(lphb)
-					yield(get_node("AnimatedSprite"), "animation_finished")
-					busy = false
+					if $AnimatedSprite.get_animation() != "Light Punch":
+						$AnimatedSprite.play("Light Punch")
+						busy = true
+						print("punch start")
+						yield(get_node("AnimatedSprite"), "frame_changed")
+						if $AnimatedSprite.get_frame() == 1:
+							var lphb = hitBox.instance()
+							lphb.initialize(player, 10, 1, 1, 300, Vector2(17 * facingValue, 3), Vector2(8 * facingValue, 4), .2, self)
+							add_child(lphb)
+						print("waiting for punch to end")
+						yield(get_node("AnimatedSprite"), "animation_finished")
+						busy = false
+						print("punch end")
 				# Heavy
 				elif Input.is_action_just_pressed(heavy):
-					busy = true
-					$AnimatedSprite.play("Medium Punch")
-					yield(get_node("AnimatedSprite"), "animation_finished")
-					busy = false
+					if $AnimatedSprite.get_animation() != "Medium Punch":
+						$AnimatedSprite.play("Medium Punch")
+						busy = true
+						yield(get_node("AnimatedSprite"), "animation_finished")
+						busy = false
 				# Jumping
 				elif dir.y > 0:
-					busy = true
 					$AnimatedSprite.play("Jump Squat")
+					busy = true
 					yield(get_node("AnimatedSprite"), "animation_finished")
 					busy = false
 					# add jump impulse
@@ -125,8 +138,8 @@ func _process(delta):
 					
 				# if crouching
 				elif dir.y < 0:
-					busy = true
 					$AnimatedSprite.play("Crouching")
+					busy = true
 					yield(get_node("AnimatedSprite"), "animation_finished")
 					busy = false
 					if dir.y < 0:
@@ -151,24 +164,25 @@ func _process(delta):
 				$CollisionShape2D.position.y = 11
 				# Light
 				if Input.is_action_just_pressed(light):
-					busy = true
-					$AnimatedSprite.play("Crouch Kick")
-					yield(get_node("AnimatedSprite"), "animation_finished")
-					busy = false
+					if $AnimatedSprite.get_animation() != "Crouch Kick":
+						$AnimatedSprite.play("Crouch Kick")
+						busy = true
+						yield(get_node("AnimatedSprite"), "animation_finished")
+						busy = false
 				# stay crouched
 				elif dir.y < 0:
 					$AnimatedSprite.play("Crouched")
 				else:
-					busy = true
 					$AnimatedSprite.play("Rising")
+					busy = true
 					yield(get_node("AnimatedSprite"), "animation_finished")
 					crouched = false
 					busy = false
 		else:
 			# Light
 			if Input.is_action_just_pressed(light):
-				busy = true
 				$AnimatedSprite.play("Air Kick")
+				busy = true
 				yield(get_node("AnimatedSprite"), "animation_finished")
 				busy = false
 			#airborne
@@ -186,8 +200,14 @@ func _physics_process(delta):
 		$AnimatedSprite.play("Landing")
 		yield(get_node("AnimatedSprite"), "animation_finished")
 		busy = false
-func _take_hit(damage, hitStun, blockStun):
+func _take_hit(damage, hitStun, blockStun, knockBack):
 	#get_parent()._player_hit(player, damage);
 	health -= damage;
+	vel.x += knockBack * facingValue * -1
+	# animation
+	busy = true
+	$AnimatedSprite.play("Hurt")
+	yield(get_node("AnimatedSprite"), "animation_finished")
+	busy = false
 	# TODO: do something with hitstun and blockstun
-	print("taking hit, ouch");
+	#print("taking hit, ouch");
