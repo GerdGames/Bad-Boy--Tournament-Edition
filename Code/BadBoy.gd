@@ -186,6 +186,11 @@ func _process(delta):
 			if Input.is_action_just_pressed(light):
 				busy = true
 				$AnimatedSprite.play("Air Kick")
+				yield(get_node("AnimatedSprite"), "frame_changed")
+				if $AnimatedSprite.get_frame() == 1:
+					var lphb = hitBox.instance()
+					lphb.initialize(player, 10, 1, 1, Vector2(17 * facingValue, 15), Vector2(8 * facingValue, 6), .2, self, false, true)
+					add_child(lphb)
 				yield(get_node("AnimatedSprite"), "animation_finished")
 				busy = false
 			#airborne
