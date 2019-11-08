@@ -179,7 +179,7 @@ func _process(delta):
 						yield(get_node("AnimatedSprite"), "frame_changed")
 						if $AnimatedSprite.get_frame() == 1:
 							var lphb = hitBox.instance()
-							lphb.initialize(player, 10, 1, 1, Vector2(17 * facingValue, 16.5), Vector2(8 * facingValue, 4), .2, self, false, true)
+							lphb.initialize(player, 10, 1, 1, 200, Vector2(17 * facingValue, 16.5), Vector2(8 * facingValue, 4), .2, self, false, true)
 							add_child(lphb)
 						yield(get_node("AnimatedSprite"), "animation_finished")
 						busy = false
@@ -203,7 +203,7 @@ func _process(delta):
 				yield(get_node("AnimatedSprite"), "frame_changed")
 				if $AnimatedSprite.get_frame() == 1:
 					var lphb = hitBox.instance()
-					lphb.initialize(player, 10, 1, 1, Vector2(17 * facingValue, 15), Vector2(8 * facingValue, 6), .2, self, false, true)
+					lphb.initialize(player, 10, 1, 1, 500, Vector2(17 * facingValue, 15), Vector2(8 * facingValue, 6), .2, self, false, true)
 					add_child(lphb)
 				yield(get_node("AnimatedSprite"), "animation_finished")
 				busy = false
@@ -230,7 +230,7 @@ func _physics_process(delta):
 		yield(get_node("AnimatedSprite"), "animation_finished")
 		busy = false
 
-func _take_hit(damage, hitStun, blockStun, isOver, isLow):
+func _take_hit(damage, hitStun, blockStun, knockBack, isOver, isLow):
 	#get_parent()._player_hit(player, damage);
 	if (isBlocking):
 		# Normal overhead/low code for when we get overheads working
@@ -247,6 +247,8 @@ func _take_hit(damage, hitStun, blockStun, isOver, isLow):
 		elif (!isLow && isOverheadBlocking):
 			print("Blocking; no damage");
 		else:
+			#knockback
+			vel.x += knockBack * facingValue * -1
 			# animation
 			busy = true
 			$AnimatedSprite.play("Hurt")
@@ -254,8 +256,9 @@ func _take_hit(damage, hitStun, blockStun, isOver, isLow):
 			busy = false
 			print("taking hit, blocked incorrectly, ouch");
 			health -= damage;
-			vel.x += knockBack * facingValue * -1
 	else:
+		#knockback
+		vel.x += knockBack * facingValue * -1
 		# animation
 		busy = true
 		$AnimatedSprite.play("Hurt")
@@ -263,5 +266,4 @@ func _take_hit(damage, hitStun, blockStun, isOver, isLow):
 		busy = false
 		print("taking hit, ouch");
 		health -= damage;
-		vel.x += knockBack * facingValue * -1
 		# TODO: do something with hitstun and blockstun

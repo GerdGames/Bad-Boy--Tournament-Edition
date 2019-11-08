@@ -110,13 +110,13 @@ func _process(delta):
 			#check if player 1 has won enough rounds to win the match 
 				#if so 
 			#player 1 wins message
-			var p1MSG = Label.new()
-			p1MSG.set_text('Player 1 wins!')
-			p1MSG.show_on_top = true
-			add_child(p1MSG)
-			#wait
-			yield(get_tree().create_timer(1.0), "timeout")
-			get_parent().remove_child(p1MSG)
+#			var p1MSG = Label.new()
+#			p1MSG.set_text('Player 1 wins!')
+#			p1MSG.show_on_top = true
+#			add_child(p1MSG)
+#			#wait
+#			yield(get_tree().create_timer(1.0), "timeout")
+#			get_parent().remove_child(p1MSG)
 			#reset
 			reset()
 	#check facing if p1 is left of p2 set p1 to face right and p2 to face left
