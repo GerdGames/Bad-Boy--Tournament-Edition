@@ -24,6 +24,10 @@ var facingValue = 1
 var vel = Vector2()
 # load in the hitbox object
 var hitBox = preload("res://Code/Hitbox.tscn")
+# is blocking?
+var isBlocking = false;
+# is it a tall block?
+var isOverheadBlocking = false;
 # index of the palette to use
 export (int) var palette = 0
 # Called when the node enters the scene tree for the first time.
@@ -51,6 +55,8 @@ func _process(delta):
 	var right = str(prefix , "_right");
 	var up = str(prefix , "_up");
 	var down = str(prefix , "_down");
+
+	var inputBlock = false;
 	
 	#what direction the stick is in
 	var dir = Vector2()
@@ -111,7 +117,7 @@ func _process(delta):
 						yield(get_node("AnimatedSprite"), "frame_changed")
 						if $AnimatedSprite.get_frame() == 1:
 							var lphb = hitBox.instance()
-							lphb.initialize(player, 10, 1, 1, 300, Vector2(17 * facingValue, 3), Vector2(8 * facingValue, 4), .2, self)
+							lphb.initialize(player, 10, 1, 1, 300, Vector2(17 * facingValue, 3), Vector2(8 * facingValue, 4), .2, self, false, false)
 							add_child(lphb)
 						print("waiting for punch to end")
 						yield(get_node("AnimatedSprite"), "animation_finished")
@@ -153,7 +159,10 @@ func _process(delta):
 				# if moving back
 				elif dir.x < 0:
 					$AnimatedSprite.play("Walk Forward", true)
-				
+					# if they're not jumping, they can block
+					if (dir.y <= 0):
+						inputBlock = true;
+						isOverheadBlocking = true;
 				# if neither
 				else:
 					busy = false
@@ -165,13 +174,21 @@ func _process(delta):
 				# Light
 				if Input.is_action_just_pressed(light):
 					if $AnimatedSprite.get_animation() != "Crouch Kick":
-						$AnimatedSprite.play("Crouch Kick")
 						busy = true
+						$AnimatedSprite.play("Crouch Kick")
+						yield(get_node("AnimatedSprite"), "frame_changed")
+						if $AnimatedSprite.get_frame() == 1:
+							var lphb = hitBox.instance()
+							lphb.initialize(player, 10, 1, 1, Vector2(17 * facingValue, 16.5), Vector2(8 * facingValue, 4), .2, self, false, true)
+							add_child(lphb)
 						yield(get_node("AnimatedSprite"), "animation_finished")
 						busy = false
 				# stay crouched
 				elif dir.y < 0:
 					$AnimatedSprite.play("Crouched")
+					if (dir.x < 0):
+						inputBlock = true;
+						isOverheadBlocking = false;
 				else:
 					$AnimatedSprite.play("Rising")
 					busy = true
@@ -183,11 +200,23 @@ func _process(delta):
 			if Input.is_action_just_pressed(light):
 				$AnimatedSprite.play("Air Kick")
 				busy = true
+				yield(get_node("AnimatedSprite"), "frame_changed")
+				if $AnimatedSprite.get_frame() == 1:
+					var lphb = hitBox.instance()
+					lphb.initialize(player, 10, 1, 1, Vector2(17 * facingValue, 15), Vector2(8 * facingValue, 6), .2, self, false, true)
+					add_child(lphb)
 				yield(get_node("AnimatedSprite"), "animation_finished")
 				busy = false
 			#airborne
 			else:
 				$AnimatedSprite.play("Airborne")
+
+	# handle block
+	if (inputBlock):
+		isBlocking = true;
+	else:
+		isBlocking = false;
+		isOverheadBlocking = false;
 func _physics_process(delta):
 	# add gravity
 	vel.y += grav * delta
@@ -200,14 +229,39 @@ func _physics_process(delta):
 		$AnimatedSprite.play("Landing")
 		yield(get_node("AnimatedSprite"), "animation_finished")
 		busy = false
-func _take_hit(damage, hitStun, blockStun, knockBack):
+
+func _take_hit(damage, hitStun, blockStun, isOver, isLow):
 	#get_parent()._player_hit(player, damage);
-	health -= damage;
-	vel.x += knockBack * facingValue * -1
-	# animation
-	busy = true
-	$AnimatedSprite.play("Hurt")
-	yield(get_node("AnimatedSprite"), "animation_finished")
-	busy = false
-	# TODO: do something with hitstun and blockstun
-	#print("taking hit, ouch");
+	if (isBlocking):
+		# Normal overhead/low code for when we get overheads working
+		# TODO: Overheads
+		#if (isOver && isOverheadBlocking):
+		#	print("Blocking; no damage");
+		#elif (isLow && !isOverheadBlocking):
+		#	print("Blocking; no damage");
+		#elif (!isOver && !isLow):
+		#	print("Blocking; no damage");
+		# In the meantime, need players to take damage if they crouch hide
+		if (isLow && !isOverheadBlocking):
+			print("Blocking; no damage");
+		elif (!isLow && isOverheadBlocking):
+			print("Blocking; no damage");
+		else:
+			# animation
+			busy = true
+			$AnimatedSprite.play("Hurt")
+			yield(get_node("AnimatedSprite"), "animation_finished")
+			busy = false
+			print("taking hit, blocked incorrectly, ouch");
+			health -= damage;
+			vel.x += knockBack * facingValue * -1
+	else:
+		# animation
+		busy = true
+		$AnimatedSprite.play("Hurt")
+		yield(get_node("AnimatedSprite"), "animation_finished")
+		busy = false
+		print("taking hit, ouch");
+		health -= damage;
+		vel.x += knockBack * facingValue * -1
+		# TODO: do something with hitstun and blockstun
