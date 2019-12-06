@@ -96,6 +96,7 @@ func _process(delta):
 			var tMSG = Label.instance()
 			#wait
 			#reset
+			
 			reset()
 		# otherwise if p2 has 0 health p1 wins and vice versa
 		elif (p1.health <= 0):
@@ -104,6 +105,8 @@ func _process(delta):
 			#player 2 wins message
 			#wait
 			#reset
+			$HUD/WinCounterP2.wins += 1;
+			$HUD/WinCounterP2._updateScore();
 			reset()
 		elif (p2.health <= 0):
 			#round awarded to player 1
@@ -118,6 +121,8 @@ func _process(delta):
 #			yield(get_tree().create_timer(1.0), "timeout")
 #			get_parent().remove_child(p1MSG)
 			#reset
+			$HUD/WinCounterP1.wins += 1;
+			$HUD/WinCounterP1._updateScore();
 			reset()
 	#check facing if p1 is left of p2 set p1 to face right and p2 to face left
 	if p1.position.x < p2.position.x + 10:
@@ -129,5 +134,9 @@ func _process(delta):
 	
 	#check for reset button
 	if Input.is_action_just_pressed('reset'):
+		$HUD/WinCounterP1.wins == 0;
+		$HUD/WinCounterP1._updateScore();
+		$HUD/WinCounterP2.wins == 0;
+		$HUD/WinCounterP2._updateScore();
 		reset()
 #	pass
