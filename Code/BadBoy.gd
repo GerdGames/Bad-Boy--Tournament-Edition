@@ -128,6 +128,17 @@ func _process(delta):
 					if $AnimatedSprite.get_animation() != "Medium Punch":
 						$AnimatedSprite.play("Medium Punch")
 						busy = true
+						# yield(get_node("AnimatedSprite"), "frame_changed")
+						# 2 frame startup to give it a 'weakness'
+						var numFrames = 2;
+						while (numFrames > 0):
+							yield(get_node("AnimatedSprite"), "frame_changed")
+							numFrames -= 1;
+							if (numFrames == 0):
+								var lphb = hitBox.instance()
+								lphb.initialize(player, 15, 1, 1, 300, Vector2(17 * facingValue, 9), Vector2(7.5 * facingValue, 5), .2, self, false, false)
+								add_child(lphb)
+						print("waiting for punch to end")
 						yield(get_node("AnimatedSprite"), "animation_finished")
 						busy = false
 				# Jumping
